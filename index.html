@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TikTok Callback</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 3rem auto; padding: 0 1rem; }
+    textarea { width: 100%; height: 6rem; font-family: monospace; }
+    .err { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>TikTok Callback</h1>
+  <p id="msg">Menunggu kode...</p>
+  <textarea id="code" readonly hidden></textarea>
+  <script>
+    // Semua berjalan di browser Anda. Tidak ada data yang dikirim ke server mana pun.
+    const p = new URLSearchParams(location.search);
+    const msg = document.getElementById('msg');
+    const box = document.getElementById('code');
+    if (p.get('code')) {
+      box.value = p.get('code'); // sudah di-decode oleh URLSearchParams
+      box.hidden = false;
+      msg.textContent = 'Salin kode ini, lalu kirim ke POST /tiktok/token. Kode cepat kedaluwarsa dan hanya sekali pakai.';
+      box.select();
+    } else if (p.get('error')) {
+      msg.className = 'err';
+      msg.textContent = 'Login ditolak: ' + p.get('error') + ' ' + (p.get('error_description') || '');
+    } else {
+      msg.textContent = 'Halaman ini siap. Mulai login dari /tiktok/auth-url.';
+    }
+  </script>
+</body>
+</html>
